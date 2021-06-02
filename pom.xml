@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>n</groupId>
+	<artifactId>service2</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<name>service2</name>
+	<description>Service 2</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-parent</artifactId>
+	    <version>2.5.0</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+	
+	<properties>
+        <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>11</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+	</properties>
+
+	<dependencies>
+		<dependency>
+		    <groupId>commons-configuration</groupId>
+		    <artifactId>commons-configuration</artifactId>
+		    <version>1.10</version>
+		</dependency>
+		<dependency>
+		  <groupId>com.google.code.gson</groupId>
+		  <artifactId>gson</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-commons</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-artemis</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>26.0-jre</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<!-- Code Coverage report generation -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.6</version>
+				<executions>
+					<!-- Prepares the property pointing to the JaCoCo runtime agent which
+						is passed as VM argument when Maven the Surefire plugin is executed. -->
+					<execution>
+						<id>pre-unit-test</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<!-- Sets the name of the property containing the settings for JaCoCo
+								runtime agent. -->
+							<propertyName>surefireArgLine</propertyName>
+						</configuration>
+					</execution>
+					<!-- Ensures that the code coverage report for unit tests is created
+						after unit tests have been run. -->
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>merge-all-jacoco</id>
+						<goals><goal>merge</goal></goals>
+						<phase>test</phase>
+						<configuration> 
+						<destFile>merged.exec</destFile> 
+						<fileSets>
+							<fileSet>
+							<directory>${project.build.directory}</directory>
+							<includes>
+								<include>*.exec</include>
+							</includes>
+							</fileSet>
+						</fileSets>
+						</configuration> 
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Used for unit tests -->
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.19.1</version>
+				<executions>
+				<execution>
+					<id>default-test</id>
+					<phase>test</phase>
+					<goals>
+					<goal>test</goal>
+					</goals>
+					<configuration>
+					<argLine>${surefireArgLine}</argLine>
+					</configuration>
+				</execution>
+				</executions>
+				<configuration>
+				<argLine>-XX:MaxPermSize=512m</argLine>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
